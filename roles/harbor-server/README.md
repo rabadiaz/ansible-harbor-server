@@ -62,7 +62,7 @@ Install using a locally hosted copy of the installation tar:
       roles:
         - harbor-server
       vars:
-        - harbor_install_upload_localcopy_of_installer: /Users/user/harbor-offline-installer-v1.4.0.tgz
+        - harbor_install_upload_localcopy_of_installer: /Your/local/path/harbor-offline-installer-v1.4.0.tgz
         - harbor_install_https_self_signed: True # need to add check
         - harbor_ui_url_protocol: https
         - harbor_ssl_cert: '{{ harbor_secretkey_path }}/cert/server.crt'
