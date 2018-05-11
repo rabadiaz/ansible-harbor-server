@@ -1,0 +1,57 @@
+---
+# tasks file for harbor-server
+
+
+# install with yum if...
+
+- name: add docker group
+  action: group name=docker state=present
+
+- name: bootstrap docker-ce repo install
+  get_url:
+   url: https://download.docker.com/linux/centos/docker-ce.repo
+   dest: /etc/yum.repos.d/
+   mode: 0644
+
+#- name: docker-ce install
+#  yum:
+#   name: docker-ce
+#   enablerepo: docker-ce-stable
+#   state: present
+
+#- name: add docker repo
+#  yum_repository:
+#   name: docker 
+#   description: 'Docker official repo'
+#   baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+#   gpgcheck: yes
+#   enabled: yes
+#   state: present
+
+- name: install deps
+  action: yum name="{{ item }}" state=latest update_cache=yes
+  with_items:
+    - git
+    - python-pycurl
+    - docker-python
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: install docker
+  action: yum name="{{ item }}" state=latest update_cache=yes
+  with_items:
+    - docker-ce
+#  notify: service docker start/enable
+
+- name: install docker-compose as a container
+  get_url:
+   url: https://github.com/docker/compose/releases/download/1.21.0/docker-compose-Linux-x86_64
+   dest: /usr/local/bin/docker-compose
+   mode: 0700
+
+- name: Enable and restart docker in systemd
+  systemd:
+    name: docker
+    enabled: yes
+    state: restarted

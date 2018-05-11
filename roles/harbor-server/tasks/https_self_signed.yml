@@ -1,0 +1,17 @@
+---
+- name: check or create ssl key dir
+  file: 
+    state: directory
+    path: "{{ harbor_ssl_cert_key | dirname }}"
+# in case the cert dir is somewhere else
+- name: check or create ssl cert dir
+  file: 
+    state: directory
+    path: '{{ harbor_ssl_cert | dirname }}'
+
+# maybe set up alternate names but let's not make it too complicated better to make certs
+# with another role
+- name: generate self signed cert with openssl
+  command: openssl req -newkey rsa:4096 -nodes  -sha256 -keyout '{{ harbor_ssl_cert_key }}' -subj '{{ harbor_ssl_self_subject }}' -new  -x509 -days '{{ harbor_ssl_self_days }}' -out '{{ harbor_ssl_cert }}'
+  args:
+    creates: '{{ harbor_ssl_cert }}' #dont write over a cert

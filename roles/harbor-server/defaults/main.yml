@@ -1,0 +1,48 @@
+---
+# defaults file for harbor-server
+#
+# were to download an unpack installer
+harbor_install_tmp: /tmp/harbor
+# where the installer ends up ( should remain after reboot so not tmp)
+harbor_install_dir: /opt/harbor_install
+# current non rc
+harbor_install_download: https://storage.googleapis.com/harbor-releases/release-1.4.0/harbor-offline-installer-v1.4.0.tgz
+harbor_install_tgz: harbor-installer.tgz
+harbor_install_https_self_signed: False
+# If true, do not try to install docker or docker-compose with yum
+# set to true to skip this step for testing
+harbor_install_skip_docker_compose: True
+
+# DO NOT use localhost or 127.0.0.1, because Harbor needs to be accessed by external clients.
+# set the conservative safe default for testing, must be set to deply
+harbor_http_port: '8888'
+harbor_https_port: '8443'
+harbor_hostname: 127.0.0.1:{{ harbor_https_port }}
+
+#The protocol for accessing the UI and token/notification service
+harbor_ui_url_protocol: https
+harbor_db_host: harbor-db
+harbor_db_password: abc123
+harbor_customize_crt: on
+#The path of cert and key files for nginx
+#harbor_ssl_cert: 
+#harbor_ssl_cert_key:
+harbor_ssl_self_days: 3650
+harbor_ssl_self_subject: "/O=My Harbor Server/OU=Test/CN=harbor-server"
+# /data is whatever path you want to use to store harbor data
+harbor_secretkey_path: /volumen/harbor
+#harbor_email_server:
+#harbor_email_server_port:
+#harbor_email_identity:
+#harbor_email_username:
+#harbor_email_password:
+#harbor_email_from:
+#harbor_email_ssl:
+harbor_admin_password: Harbor123456
+harbor_auth_mode: db_auth
+# allow self registration
+harbor_self_registration: off
+# to be safe admin only
+harbor_project_creation_restriction: adminonly
+# safe I guess
+harbor_verify_remote_cert: on
